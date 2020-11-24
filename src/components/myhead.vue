@@ -14,7 +14,7 @@
                 <router-link to='/nothing' class="menu-item" >Categories</router-link>
                 <router-link to='/nothing' class="menu-item" >Tags</router-link>
                 <router-link to='/nothing' class="menu-item apps" >Apps</router-link>
-                <input @click='watch' id="switch_default" type="checkbox" class="switch_default" v-model='islight'/>
+                <input id="switch_default" type="checkbox" class="switch_default" v-model="nightmodel"/>
                 <label for="switch_default" class="toggleBtn"></label>
             </div>
         </div>
@@ -23,12 +23,12 @@
         <div class="container">
             <div class="navbar-header">
                 <div>
-                    <router-link to='/nothing' class="menu-item" href="" Match="NavLinkMatch.All">😍阿星Plus</router-link>
+                    <router-link to='/' class="menu-item" href="" Match="NavLinkMatch.All">😍阿星Plus</router-link>
                     <router-link to='/nothing'>&nbsp;·&nbsp;Light</router-link>
                 </div>
-                <div class="menu-toggle">&#9776; Menu</div>
+                <div @click="menuclick" class="menu-toggle">&#9776; Menu</div>
             </div>
-            <div class="menu">
+            <div :class='["menu",menudispaly?"active":""]' >
                 <router-link to='/nothing' class="menu-item" >Posts</router-link>
                 <router-link to='/nothing' class="menu-item" >Categories</router-link>
                 <router-link to='/nothing' class="menu-item" >Tags</router-link>
@@ -40,17 +40,29 @@
 </template>
 
 <script>
-
 export default {
   name: 'myhead',
   data () {
     return {
-      islight: false
+      menudispaly: false,
+      nightmodel: false
     }
   },
   methods: {
     watch: function () {
-      console.log(this.islight)
+      console.log(this.nightmodel)
+    },
+    menuclick: function () {
+      this.menudispaly = !this.menudispaly
+    }
+  },
+  watch: {
+    nightmodel (newval) {
+      if (newval) {
+            document.querySelector('body').classList.add('dark-theme');
+        } else {
+            document.querySelector('body').classList.remove('dark-theme');
+        }
     }
   }
 }
