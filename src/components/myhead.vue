@@ -6,11 +6,11 @@
         <div class="container">
             <div class="navbar-header header-logo">
                 <router-link to='/' class="menu-item" Match="NavLinkMatch.All">
-                    😍阿星Plus
+                    😍XiaMi
                 </router-link>
             </div>
             <div class="menu navbar-right">
-                <router-link to='/nothing' class="menu-item" >Posts</router-link>
+                <router-link to='/posts' class="menu-item" >Posts</router-link>
                 <router-link to='/nothing' class="menu-item" >Categories</router-link>
                 <router-link to='/nothing' class="menu-item" >Tags</router-link>
                 <router-link to='/nothing' class="menu-item apps" >Apps</router-link>
@@ -23,13 +23,13 @@
         <div class="container">
             <div class="navbar-header">
                 <div>
-                    <router-link to='/' class="menu-item" href="" Match="NavLinkMatch.All">😍阿星Plus</router-link>
-                    <router-link to='/nothing'>&nbsp;·&nbsp;Light</router-link>
+                    <router-link to='/' class="menu-item">😍XiaMi</router-link>
+                    <a @click="changemodel" class="menu-item">&nbsp;·&nbsp;{{modeltype}}</a>
                 </div>
                 <div @click="menuclick" class="menu-toggle">&#9776; Menu</div>
             </div>
             <div :class='["menu",menudispaly?"active":""]' >
-                <router-link to='/nothing' class="menu-item" >Posts</router-link>
+                <router-link to='/posts' class="menu-item" >Posts</router-link>
                 <router-link to='/nothing' class="menu-item" >Categories</router-link>
                 <router-link to='/nothing' class="menu-item" >Tags</router-link>
                 <router-link to='/nothing' class="menu-item apps" >Apps</router-link>
@@ -45,7 +45,8 @@ export default {
   data () {
     return {
       menudispaly: false,
-      nightmodel: false
+      nightmodel: false,
+      modeltype: 'light'
     }
   },
   methods: {
@@ -54,15 +55,23 @@ export default {
     },
     menuclick: function () {
       this.menudispaly = !this.menudispaly
+    },
+    changemodel: function () {
+      this.nightmodel = !this.nightmodel
+      if (this.nightmodel) {
+        this.modeltype = 'dark'
+      } else {
+        this.modeltype = 'light'
+      }
     }
   },
   watch: {
     nightmodel (newval) {
       if (newval) {
-            document.querySelector('body').classList.add('dark-theme');
-        } else {
-            document.querySelector('body').classList.remove('dark-theme');
-        }
+        document.querySelector('body').classList.add('dark-theme')
+      } else {
+        document.querySelector('body').classList.remove('dark-theme')
+      }
     }
   }
 }
