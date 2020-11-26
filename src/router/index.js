@@ -4,6 +4,9 @@ import Router from 'vue-router'
 import index from '@/components/index'
 import nothing from '@/components/nothing'
 import posts from '@/components/pages/Posts/Posts.vue'
+import categories from '@/components/pages/Categories/Categories'
+import tags from '@/components/pages/Tags/Tags'
+import friendlinks from '@/components/pages/FriendLinks/FriendLinks'
 Vue.use(Router)
 
 export default new Router({
@@ -18,12 +21,16 @@ export default new Router({
       component: posts
     },
     {
-      path: '/posts/page/:page',
-      component: posts
+      path: '/categories',
+      component: categories
     },
     {
-      path: '/posts/:page',
-      component: posts
+      path: '/tags',
+      component: tags
+    },
+    {
+      path: '/apps',
+      component: friendlinks
     },
     {
       path: '*',

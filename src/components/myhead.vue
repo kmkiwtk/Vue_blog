@@ -11,9 +11,9 @@
             </div>
             <div class="menu navbar-right">
                 <router-link to='/posts' class="menu-item" >Posts</router-link>
-                <router-link to='/nothing' class="menu-item" >Categories</router-link>
-                <router-link to='/nothing' class="menu-item" >Tags</router-link>
-                <router-link to='/nothing' class="menu-item apps" >Apps</router-link>
+                <router-link to='/categories' class="menu-item" >Categories</router-link>
+                <router-link to='/tags' class="menu-item" >Tags</router-link>
+                <router-link to='/apps' class="menu-item apps" >Apps</router-link>
                 <input id="switch_default" type="checkbox" class="switch_default" v-model="nightmodel"/>
                 <label for="switch_default" class="toggleBtn"></label>
             </div>
@@ -30,9 +30,9 @@
             </div>
             <div :class='["menu",menudispaly?"active":""]' >
                 <router-link to='/posts' class="menu-item" >Posts</router-link>
-                <router-link to='/nothing' class="menu-item" >Categories</router-link>
-                <router-link to='/nothing' class="menu-item" >Tags</router-link>
-                <router-link to='/nothing' class="menu-item apps" >Apps</router-link>
+                <router-link to='/categories' class="menu-item" >Categories</router-link>
+                <router-link to='/tags' class="menu-item" >Tags</router-link>
+                <router-link to='/apps' class="menu-item apps" >Apps</router-link>
             </div>
         </div>
     </nav>
