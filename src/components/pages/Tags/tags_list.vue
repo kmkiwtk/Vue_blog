@@ -1,12 +1,11 @@
 <template>
-  <a>{{tag.displayName}}<small>{{tag.count}}</small></a>
+  <router-link :to="{name:'tagposts',params:{name:tag.displayName}}">{{tag.displayName}}<small>{{tag.count}}</small></router-link>
 </template>
 
 <script>
 export default {
   props: ['tag'],
   created () {
-    console.log(this.tag)
   }
 }
 </script>

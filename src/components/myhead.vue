@@ -50,9 +50,6 @@ export default {
     }
   },
   methods: {
-    watch: function () {
-      console.log(this.nightmodel)
-    },
     menuclick: function () {
       this.menudispaly = !this.menudispaly
     },

@@ -8,6 +8,8 @@ import categories from '@/components/pages/Categories/Categories'
 import tags from '@/components/pages/Tags/Tags'
 import friendlinks from '@/components/pages/FriendLinks/FriendLinks'
 import categoryposts from '@/components/pages/Categories/Category.Posts'
+import tagposts from '@/components/pages/Tags/Tag.Posts'
+import post from '@/components/pages/Posts/Post.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -31,12 +33,22 @@ export default new Router({
       component: categoryposts
     },
     {
+      path: '/tag/posts/:name',
+      name: 'tagposts',
+      component: tagposts
+    },
+    {
       path: '/tags',
       component: tags
     },
     {
       path: '/apps',
       component: friendlinks
+    },
+    {
+      path: '/post/:url',
+      name: 'post',
+      component: post
     },
     {
       path: '*',
