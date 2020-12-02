@@ -1,6 +1,6 @@
 # blogtest
 
-> A Vue.js project
+> A Vue.js project 简单的博客前端页面
 
 ## Build Setup
 
