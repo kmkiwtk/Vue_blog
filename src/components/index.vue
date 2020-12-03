@@ -3,7 +3,7 @@
     <div class="container">
         <div class="intro">
             <div class="avatar">
-                <a href="javascript:;"><img src="https://static.meowv.com/images/avatar.jpg"></a>
+                <a href="javascript:;"><img src="../assets/avatar.jpg"></a>
             </div>
             <div class="nickname">XiaMi</div>
             <div class="description">
@@ -22,7 +22,7 @@
                 <a target="_blank" class="link-item" title="API" href="https://api.meowv.com/">
                     <i class="iconfont iconapi"></i>
                 </a>
-                <a class="link-item" title="Manage" href="/account/auth">
+                <a class="link-item" title="Manage" :href="url">
                     <i class="iconfont iconcode"></i>
                 </a>
                 <a target="_blank" class="link-item" title="Github" href="https://github.com/Meowv/">
@@ -41,11 +41,13 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'index',
   data () {
     return {
-      isshow: false
+      isshow: false,
+      url: ''
     }
   },
   methods: {
@@ -54,7 +56,19 @@ export default {
     },
     mouseleave: function () {
       this.isshow = false
+    },
+    geturl: function () {
+      axios({
+        method: 'get',
+        url: '/api/auth/url',
+        timeout: 3000
+      }).then(res => {
+        this.url = res.data.result
+      })
     }
+  },
+  created () {
+    this.geturl()
   }
 }
 </script>

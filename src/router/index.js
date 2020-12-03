@@ -10,6 +10,8 @@ import friendlinks from '@/components/pages/FriendLinks/FriendLinks'
 import categoryposts from '@/components/pages/Categories/Category.Posts'
 import tagposts from '@/components/pages/Tags/Tag.Posts'
 import post from '@/components/pages/Posts/Post.vue'
+import admin from '@/components/pages/Admin/Admin'
+import auth from '@/components/pages/Admin/Auth'
 Vue.use(Router)
 
 export default new Router({
@@ -49,6 +51,14 @@ export default new Router({
       path: '/post/:url',
       name: 'post',
       component: post
+    },
+    {
+      path: '/admin',
+      component: admin
+    },
+    {
+      path: '/auth',
+      component: auth
     },
     {
       path: '*',
