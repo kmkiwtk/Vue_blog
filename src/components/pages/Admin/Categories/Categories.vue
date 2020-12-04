@@ -7,10 +7,11 @@
                      :key="category.id"
                      :category="category"
                      @edit="listshowbox(category)"
+                     @del="deletecategory"
       ></category-list>
       <div class="card-item">
         <div class="categories">
-          <a><h3>📕~~~ 新增分类 ~~~📕</h3></a>
+          <a @click="insertshowbox"><h3>📕~~~ 新增分类 ~~~📕</h3></a>
         </div>
       </div>
     </div>
@@ -19,6 +20,8 @@
        :category="boxcategory"
        :bottontext='bottontext'
        @Close="closebox"
+       @edit="editcategory"
+       @insert="insertcategory"
   ></box>
 </div>
 </template>
@@ -48,7 +51,7 @@ export default {
           console.log('删除过期token')
           this.$cookies.remove('token')
           console.log('重新获取token')
-          this.$router.push({path: '/auth'})
+          this.$router.push({path: '/'})
         } else {
           this.categories = res.data.result
           console.log('获取数据成功')
@@ -60,6 +63,12 @@ export default {
       console.log(category)
       this.boxcategory = category
       this.bottontext = '修改'
+      this.open = true
+    },
+    insertshowbox: function () {
+      console.log('添加新的分类')
+      this.boxcategory = null
+      this.bottontext = '添加'
       this.open = true
     },
     closebox: function () {
@@ -87,6 +96,8 @@ export default {
       })
     },
     insertcategory: function (category) {
+      this.open = false
+      console.log('发起添加请求')
       axios({
         method: 'post',
         url: '/api/blog/category',
@@ -97,9 +108,24 @@ export default {
       }).then(res => {
         if (res.data.success === true) {
           console.log('添加成功')
-          this.getData()
         } else {
           console.log('添加失败')
+          console.log(res)
+        }
+        this.getData()
+      })
+    },
+    deletecategory: function (id) {
+      console.log('发起删除请求')
+      axios({
+        url: 'api/blog/category?id=' + id,
+        method: 'delete'
+      }).then(res => {
+        if (res.data.success) {
+          console.log('删除成功')
+          this.getData()
+        } else {
+          console.log('删除失败')
           console.log(res)
         }
       })

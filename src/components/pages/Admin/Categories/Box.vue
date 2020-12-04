@@ -12,7 +12,7 @@
         <b>CategoryName：</b><input type="text" v-model="categoryName" />
       </div>
       <div class="box-item box-item-btn">
-        <button class="box-btn">{{bottontext}}</button>
+        <button class="box-btn" @click="Confirm">{{bottontext}}</button>
         <button class="box-btn btn-primary" @click="Close">取消</button>
       </div>
     </div>

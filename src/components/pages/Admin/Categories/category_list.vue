@@ -12,18 +12,12 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
   props: ['category'],
   methods: {
     deletecategory: function () {
       if (confirm('\n💥💢真的要干掉这个该死的分类吗💢💥')) {
-        axios({
-          url: 'api/blog/category?id=' + this.category.id,
-          method: 'delete'
-        }).then(res => {
-          console.log(res)
-        })
+        this.$emit('del', this.category.id)
       } else {
         console.log('放弃删除')
       }
