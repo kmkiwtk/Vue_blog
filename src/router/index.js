@@ -12,6 +12,7 @@ import tagposts from '@/components/pages/Tags/Tag.Posts'
 import post from '@/components/pages/Posts/Post.vue'
 import admin from '@/components/pages/Admin/Admin'
 import auth from '@/components/pages/Admin/Auth'
+import admincategories from '@/components/pages/Admin/Categories/Categories'
 Vue.use(Router)
 
 export default new Router({
@@ -55,6 +56,10 @@ export default new Router({
     {
       path: '/admin',
       component: admin
+    },
+    {
+      path: '/admin/categories',
+      component: admincategories
     },
     {
       path: '/auth',

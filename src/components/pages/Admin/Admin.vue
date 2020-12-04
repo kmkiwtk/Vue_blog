@@ -9,7 +9,7 @@
             <a href="/admin/posts"><h3>📗~~~ 文章管理 ~~~📗</h3></a>
         </li>
         <li>
-            <a href="/admin/categories"><h3>📕~~~ 分类管理 ~~~📕</h3></a>
+            <router-link to="/admin/categories"><h3>📕~~~ 分类管理 ~~~📕</h3></router-link>
         </li>
         <li>
             <a href="/admin/tags"><h3>📘~~~ 标签管理 ~~~📘</h3></a>
@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   created () {
     console.log('判断是否存有token')
@@ -30,6 +31,7 @@ export default {
       this.$router.push({ path: '/auth' })
     } else {
       console.log('存在token')
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.$cookies.get('token')
     }
   }
 }

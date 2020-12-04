@@ -40,7 +40,7 @@ export default {
       axios({
         method: 'get',
         url: '/api/auth/token?access_token=' + this.accesstoken,
-        timeout: 5000
+        timeout: 10000
       }).then(res => {
         console.log(res)
         this.token = res.data.result
@@ -49,7 +49,7 @@ export default {
     },
     savetoken: function () {
       console.log('保存token')
-      this.$cookies.set('token', this.token)
+      this.$cookies.set('token', this.token, '3h')
       console.log('save token success')
       console.log('从cookies中读取token：' + this.$cookies.get('token'))
     }
