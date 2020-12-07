@@ -1,5 +1,6 @@
 <template>
   <div class="post-wrap archive">
+    <a style="float:right"><h3>📝~~~ 新增文章 ~~~📝</h3></a>
     <postsList v-for="item in items"
                :key="item.year"
                :year="item.year"
@@ -58,8 +59,12 @@ export default {
       this.item = []
       axios({
         method: 'get',
-        url: '/api/blog/posts?Page=' + this.page + '&Limit=' + this.limit,
-        timeout: 3000
+        url: '/api/blog/admin/posts',
+        timeout: 3000,
+        params: {
+          Page: this.page,
+          Limit: this.limit
+        }
       }).then(res => {
         var result = res.data.result
         this.total = result.total

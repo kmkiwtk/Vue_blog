@@ -1,42 +1,42 @@
 <template>
-<div>
-  <div class="post-wrap categories">
-    <h2 class="post-title">-&nbsp;Categories&nbsp;-</h2>
+  <div>
+  <div class="post-wrap tags">
+    <h2 class="post-title">-&nbsp;Tags&nbsp;-</h2>
     <div class="categories-card">
-      <category-list v-for="category in categories"
-                     :key="category.id"
-                     :category="category"
-                     @edit="listshowbox(category)"
-                     @del="deletecategory"
-      ></category-list>
+      <tag-list v-for="tag in tags"
+                     :key="tag.id"
+                     :tag="tag"
+                     @edit="listshowbox(tag)"
+                     @del="deletetag"
+      ></tag-list>
       <div class="card-item">
         <div class="categories">
-          <a @click="insertshowbox"><h3>📕~~~ 新增分类 ~~~📕</h3></a>
+          <a @click="insertshowbox"><h3>📘~~~ 新增标签 ~~~📘</h3></a>
         </div>
       </div>
     </div>
   </div>
   <box v-show="open"
-       :category="boxcategory"
+       :tag="boxtag"
        :bottontext='bottontext'
        @Close="closebox"
-       @edit="editcategory"
-       @insert="insertcategory"
+       @edit="edittag"
+       @insert="inserttag"
   ></box>
 </div>
 </template>
 
 <script>
 import axios from 'axios'
-import categoryList from './category_list.vue'
+import tagList from './tag_list.vue'
 import box from './Box'
 export default {
-  components: { categoryList, box },
+  components: { tagList, box },
   data () {
     return {
-      categories: [],
+      tags: [],
       open: false,
-      boxcategory: {},
+      boxtag: {},
       bottontext: ''
     }
   },
@@ -44,7 +44,7 @@ export default {
     getData: function () {
       axios({
         method: 'get',
-        url: '/api/blog/admin/categories',
+        url: '/api/blog/admin/tags',
         timeout: 3000
       }).then(res => {
         if (res.data.Message === 'UnAuthorized') {
@@ -53,57 +53,60 @@ export default {
           console.log('重新获取token')
           this.$router.push({path: '/'})
         } else {
-          this.categories = res.data.result
+          this.tags = res.data.result
           console.log('获取数据成功')
         }
       })
     },
-    listshowbox: function (category) {
-      console.log('将category传给box')
-      console.log(category)
-      this.boxcategory = category
+    listshowbox: function (tag) {
+      console.log('将tag传给box')
+      console.log(tag)
+      this.boxtag = tag
       this.bottontext = '修改'
       this.open = true
     },
     insertshowbox: function () {
       console.log('添加新的分类')
-      this.boxcategory = null
+      this.boxtag = null
       this.bottontext = '添加'
       this.open = true
     },
     closebox: function () {
       this.open = false
     },
-    editcategory: function (category) {
+    edittag: function (tag) {
       axios({
         method: 'put',
-        url: '/api/blog/category',
+        url: '/api/blog/tag',
         params: {
-          id: category.id
+          id: tag.id
         },
         data: {
-          categoryName: category.categoryName,
-          displayName: category.displayName
+          tagName: tag.tagName,
+          displayName: tag.displayName
         }
       }).then(res => {
         if (res.data.success === true) {
           console.log('编辑成功')
           this.getData()
+          this.closebox()
         } else {
           console.log('编辑失败')
           console.log(res)
+          alert('编辑失败')
+          this.closebox()
         }
       })
     },
-    insertcategory: function (category) {
+    inserttag: function (tag) {
       this.open = false
       console.log('发起添加请求')
       axios({
         method: 'post',
-        url: '/api/blog/category',
+        url: '/api/blog/tag',
         data: {
-          categoryName: category.categoryName,
-          displayName: category.displayName
+          tagName: tag.tagName,
+          displayName: tag.displayName
         }
       }).then(res => {
         if (res.data.success === true) {
@@ -115,14 +118,11 @@ export default {
         this.getData()
       })
     },
-    deletecategory: function (id) {
+    deletetag: function (id) {
       console.log('发起删除请求')
       axios({
-        url: 'api/blog/category',
-        method: 'delete',
-        params: {
-          id: id
-        }
+        url: 'api/blog/tag?id=' + id,
+        method: 'delete'
       }).then(res => {
         if (res.data.success) {
           console.log('删除成功')

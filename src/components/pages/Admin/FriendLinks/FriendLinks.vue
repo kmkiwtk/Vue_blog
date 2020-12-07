@@ -1,42 +1,42 @@
 <template>
 <div>
   <div class="post-wrap categories">
-    <h2 class="post-title">-&nbsp;Categories&nbsp;-</h2>
+    <h2 class="post-title">-&nbsp;FriendLinks&nbsp;-</h2>
     <div class="categories-card">
-      <category-list v-for="category in categories"
-                     :key="category.id"
-                     :category="category"
-                     @edit="listshowbox(category)"
-                     @del="deletecategory"
-      ></category-list>
+      <friendlink-list v-for="friendlink in friendlinks"
+                     :key="friendlink.id"
+                     :friendlink="friendlink"
+                     @edit="listshowbox(friendlink)"
+                     @del="deletefriendlink"
+      ></friendlink-list>
       <div class="card-item">
         <div class="categories">
-          <a @click="insertshowbox"><h3>📕~~~ 新增分类 ~~~📕</h3></a>
+          <a @click="insertshowbox"><h3>📒~~~ 新增友链 ~~~📒</h3></a>
         </div>
       </div>
     </div>
   </div>
   <box v-show="open"
-       :category="boxcategory"
+       :friendlink="boxfriendlink"
        :bottontext='bottontext'
        @Close="closebox"
-       @edit="editcategory"
-       @insert="insertcategory"
+       @edit="editfriendlink"
+       @insert="insertfriendlink"
   ></box>
 </div>
 </template>
 
 <script>
 import axios from 'axios'
-import categoryList from './category_list.vue'
+import friendlinkList from './friendlink_list.vue'
 import box from './Box'
 export default {
-  components: { categoryList, box },
+  components: { friendlinkList, box },
   data () {
     return {
-      categories: [],
+      friendlinks: [],
       open: false,
-      boxcategory: {},
+      boxfriendlink: {},
       bottontext: ''
     }
   },
@@ -44,7 +44,7 @@ export default {
     getData: function () {
       axios({
         method: 'get',
-        url: '/api/blog/admin/categories',
+        url: '/api/blog/admin/friendlinks',
         timeout: 3000
       }).then(res => {
         if (res.data.Message === 'UnAuthorized') {
@@ -53,61 +53,63 @@ export default {
           console.log('重新获取token')
           this.$router.push({path: '/'})
         } else {
-          this.categories = res.data.result
+          this.friendlinks = res.data.result
           console.log('获取数据成功')
         }
       })
     },
-    listshowbox: function (category) {
-      console.log('将category传给box')
-      console.log(category)
-      this.boxcategory = category
+    listshowbox: function (friendlink) {
+      console.log('将friendlink传给box')
+      console.log(friendlink)
+      this.boxfriendlink = friendlink
       this.bottontext = '修改'
       this.open = true
     },
     insertshowbox: function () {
       console.log('添加新的分类')
-      this.boxcategory = null
+      this.boxfriendlink = null
       this.bottontext = '添加'
       this.open = true
     },
     closebox: function () {
       this.open = false
     },
-    editcategory: function (category) {
+    editfriendlink: function (friendlink) {
       axios({
         method: 'put',
-        url: '/api/blog/category',
+        url: '/api/blog/friendlink',
         params: {
-          id: category.id
+          id: friendlink.id
         },
         data: {
-          categoryName: category.categoryName,
-          displayName: category.displayName
+          title: friendlink.title,
+          linkUrl: friendlink.linkUrl
         }
       }).then(res => {
         if (res.data.success === true) {
           console.log('编辑成功')
           this.getData()
+          this.closebox()
         } else {
           console.log('编辑失败')
           console.log(res)
         }
       })
     },
-    insertcategory: function (category) {
+    insertfriendlink: function (friendlink) {
       this.open = false
       console.log('发起添加请求')
       axios({
         method: 'post',
-        url: '/api/blog/category',
+        url: '/api/blog/friendlink',
         data: {
-          categoryName: category.categoryName,
-          displayName: category.displayName
+          title: friendlink.title,
+          linkUrl: friendlink.linkUrl
         }
       }).then(res => {
         if (res.data.success === true) {
           console.log('添加成功')
+          this.closebox()
         } else {
           console.log('添加失败')
           console.log(res)
@@ -115,14 +117,11 @@ export default {
         this.getData()
       })
     },
-    deletecategory: function (id) {
+    deletefriendlink: function (id) {
       console.log('发起删除请求')
       axios({
-        url: 'api/blog/category',
-        method: 'delete',
-        params: {
-          id: id
-        }
+        url: 'api/blog/friendlink?id=' + id,
+        method: 'delete'
       }).then(res => {
         if (res.data.success) {
           console.log('删除成功')

@@ -6,16 +6,16 @@
             <a href="/admin/post"><h3>📝~~~ 新增文章 ~~~📝</h3></a>
         </li>
         <li>
-            <a href="/admin/posts"><h3>📗~~~ 文章管理 ~~~📗</h3></a>
+            <router-link to="/admin/posts"><h3>📗~~~ 文章管理 ~~~📗</h3></router-link>
         </li>
         <li>
             <router-link to="/admin/categories"><h3>📕~~~ 分类管理 ~~~📕</h3></router-link>
         </li>
         <li>
-            <a href="/admin/tags"><h3>📘~~~ 标签管理 ~~~📘</h3></a>
+            <router-link to="/admin/tags"><h3>📘~~~ 标签管理 ~~~📘</h3></router-link>
         </li>
         <li>
-            <a href="/admin/friendlinks"><h3>📒~~~ 友链管理 ~~~📒</h3></a>
+            <router-link to="/admin/friendlinks"><h3>📒~~~ 友链管理 ~~~📒</h3></router-link>
         </li>
     </ul>
 </div>

@@ -13,6 +13,10 @@ import post from '@/components/pages/Posts/Post.vue'
 import admin from '@/components/pages/Admin/Admin'
 import auth from '@/components/pages/Admin/Auth'
 import admincategories from '@/components/pages/Admin/Categories/Categories'
+import admintags from '@/components/pages/Admin/Tags/Tags'
+import adminfriendlinks from '@/components/pages/Admin/FriendLinks/FriendLinks'
+import adminposts from '@/components/pages/Admin/Posts/Posts'
+import adminpost from '@/components/pages/Admin/Posts/Post'
 Vue.use(Router)
 
 export default new Router({
@@ -58,8 +62,24 @@ export default new Router({
       component: admin
     },
     {
+      path: '/admin/posts',
+      component: adminposts
+    },
+    {
+      path: '/admin/post',
+      component: adminpost
+    },
+    {
       path: '/admin/categories',
       component: admincategories
+    },
+    {
+      path: '/admin/tags',
+      component: admintags
+    },
+    {
+      path: '/admin/friendlinks',
+      component: adminfriendlinks
     },
     {
       path: '/auth',
