@@ -24,7 +24,7 @@ export default {
     jumptourl: function (time, name) {
       var patt = /[\s|,]/
       time = time.split(patt, 2)
-      var url = '/' + this.year + '/' + this.changetonumber(time[0]) + '/' + time[1] + '/' + name
+      var url = '/' + this.year + '/' + this.changetonumber(time[0]) + '/' + time[1] + '/' + name + '/'
       this.$router.push({
         name: 'post',
         params: { url: url }

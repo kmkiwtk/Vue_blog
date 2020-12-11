@@ -1,115 +1,172 @@
 <template>
-  <article class="post-wrap">
-    <header class="post-header">
-      <h1 class="post-title">{{title}}</h1>
-      <div class="post-meta">
-        Author: <a itemprop="author" rel="author" >{{author}}</a>
-        <span class="post-time">
-          Date: <a>{{creationTime}}</a>
-        </span>
-        <span class="post-category">
-          Category:
-          <router-link :to="{name:'categoryposts',params:{name:category.displayName}}"
-          >{{category.categoryName}}</router-link>
-        </span>
-      </div>
-    </header>
-    <div v-html="html" class="post-content" id="content">
-      {{html}}
+  <div class="post-box" id="editor" v-if="ready">
+    <div class="post-box-item">
+      <input type="text" v-model="title" placeholder="标题" autocomplete="off" />
+      <input type="text" v-model="author" placeholder="作者" autocomplete="off" />
     </div>
-    <section class="post-copyright">
-      <p class="copyright-item">
-        <span>Author:</span>
-        <span>{{author}}</span>
-      </p>
-      <p class="copyright-item">
-        <span>Permalink:</span>
-        <span><a>https://meowv.com/post@_post.Url</a></span>
-      </p>
-      <p class="copyright-item">
-        <span>License:</span>
-        <span>本文采用<a target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"> 知识共享 署名-非商业性使用-禁止演绎(CC BY-NC-ND)国际许可协议 </a>进行许可</span>
-      </p>
-    </section>
-    <section class="post-tags">
-      <div>
-        <span>Tag(s):</span>
-        <span class="tag">
-          <router-link v-for="tag in tags"
-                       :key="tag.displayName"
-                       :to="{name:'tagposts',params:{name:tag.displayName}}">
-            {{tag.tagName}}
-          </router-link>
-        </span>
-      </div>
-      <div>
-        <a>back</a>
-        <span>· </span>
-        <a href="/">home</a>
-      </div>
-    </section>
-    <section class="post-nav">
-      <a @click="getdata(previous.url)"
-         v-if="previous!=null"
-         class="prev"
-         rel="prev">
-        {{previous.title}}
-      </a>
-      <a @click="getdata(next.url)"
-         v-if="next!=null"
-         class="next"
-         rel="next">
-        {{next.title}}
-      </a>
-    </section>
-  </article>
+    <div class="post-box-item">
+      <input type="text" v-model="url" placeholder="URL" autocomplete="off" />
+      <input type="text" v-model="creationTime" placeholder="时间" autocomplete="off" />
+    </div>
+    <mavon-editor class="" style="height:100%;z-index:auto;opacity:1" v-model="markdown"
+                                       @change="change"
+                                       @save="openbox">
+    </mavon-editor>
+    <box v-if="open"
+       :tags="tags"
+       :categoryId='categoryId'
+       @Close="closebox"
+       @save="save"
+    ></box>
+  </div>
 </template>
 
 <script>
+import {mavonEditor} from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 import axios from 'axios'
+import moment from 'moment'
+import box from './Box'
 export default {
+  components: {
+    mavonEditor,
+    box
+  },
   data () {
     return {
       author: '',
-      category: {},
+      categoryId: -1,
       creationTime: '',
       html: '',
       markdown: '',
-      next: {},
-      previous: {},
       tags: [],
       title: '',
-      url: ''
+      url: '',
+      open: false,
+      ready: false
     }
   },
+  watch: {
+  },
   created () {
-    var url = this.$route.params.url
-    this.getdata(url)
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.$cookies.get('token')
+    console.log('开始请求接口数据')
+    var id = this.$route.params.id
+    if (id) {
+      this.getdata(id)
+    } else {
+      this.author = 'xiami'
+      this.createTime()
+      this.ready = true
+    }
   },
   methods: {
-    getdata: function (url) {
+    getdata: function (id) {
       axios({
         method: 'get',
-        url: '/api/blog/post?url=' + url,
+        url: '/api/blog/admin/post',
+        params: {
+          id: id
+        },
         timeout: 3000
       }).then(res => {
-        var result = res.data.result
-        this.author = result.author
-        this.category = result.category
-        this.creationTime = result.creationTime
-        this.html = result.html
-        this.markdown = result.markdown
-        this.next = result.next
-        this.previous = result.previous
-        this.tags = result.tags
-        this.title = result.title
-        this.url = result.url
+        if (res.data.success) {
+          var result = res.data.result
+          this.author = result.author
+          this.categoryId = result.categoryId
+          this.creationTime = result.creationTime
+          this.html = result.html
+          this.markdown = result.markdown
+          this.tags = result.tags
+          this.title = result.title
+          this.url = result.url
+          console.log(this.categoryId)
+          console.log(this.tags)
+          this.ready = true
+        } else {
+          console.log(res.data.Message)
+          this.$router.push({path: '/'})
+        }
       })
+    },
+    change: function (value, render) {
+      this.html = render
+    },
+    createTime: function () {
+      this.creationTime = moment().format()
+      console.log(moment().format())
+    },
+    save: function (data) {
+      this.open = false
+      console.log('开始保存')
+      var id = this.$route.params.id
+      if (id) {
+        axios({
+          method: 'put',
+          url: '/api/blog/post',
+          params: {
+            id: id
+          },
+          data: {
+            title: this.title,
+            author: this.author,
+            url: this.url,
+            html: this.html,
+            markdown: this.markdown,
+            categoryId: data.categoryId,
+            creationTime: this.creationTime,
+            tags: data.tags
+          }
+        }).then(res => {
+          if (res.data.success) {
+            console.log('更新成功')
+            this.getdata(this.$route.params.id)
+          } else {
+            console.log('更新失败')
+            console.log(res.data.message)
+          }
+        })
+      } else {
+        axios({
+          method: 'post',
+          url: '/api/blog/post',
+          params: {
+            id: id
+          },
+          data: {
+            title: this.title,
+            author: this.author,
+            url: this.url,
+            html: this.html,
+            markdown: this.markdown,
+            categoryId: data.categoryId,
+            creationTime: this.creationTime,
+            tags: data.tags
+          }
+        }).then(res => {
+          if (res.data.success) {
+            alert('添加成功')
+          } else {
+            alert('添加失败')
+            console.log(res)
+          }
+        })
+      }
+    },
+    closebox: function () {
+      this.open = false
+    },
+    openbox: function () {
+      this.open = true
     }
   }
 }
 </script>
 
 <style>
-
+#editor {
+  margin: auto;
+  width: 80%;
+  height: 540px;
+}
 </style>

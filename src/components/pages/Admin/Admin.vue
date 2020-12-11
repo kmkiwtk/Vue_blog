@@ -3,7 +3,7 @@
     <h2 class="post-title">-&nbsp;博客内容管理&nbsp;-</h2>
     <ul>
         <li>
-            <a href="/admin/post"><h3>📝~~~ 新增文章 ~~~📝</h3></a>
+            <router-link to="/admin/post"><h3>📝~~~ 新增文章 ~~~📝</h3></router-link>
         </li>
         <li>
             <router-link to="/admin/posts"><h3>📗~~~ 文章管理 ~~~📗</h3></router-link>
@@ -30,6 +30,7 @@ export default {
       console.log('不存在token')
       this.$router.push({ path: '/auth' })
     } else {
+      console.log(this.$cookies.get('token'))
       console.log('存在token')
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.$cookies.get('token')
     }

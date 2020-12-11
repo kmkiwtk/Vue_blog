@@ -94,6 +94,7 @@ export default {
         timeout: 3000
       }).then(res => {
         var result = res.data.result
+        console.log(res)
         this.author = result.author
         this.category = result.category
         this.creationTime = result.creationTime

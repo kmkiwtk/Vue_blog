@@ -1,6 +1,6 @@
 <template>
   <div class="post-wrap archive">
-    <a style="float:right"><h3>📝~~~ 新增文章 ~~~📝</h3></a>
+    <a  @click="insertpost"><h3>📝~~~ 新增文章 ~~~📝</h3></a>
     <postsList v-for="item in items"
                :key="item.year"
                :year="item.year"
@@ -28,7 +28,8 @@ export default {
       page: 1,
       limit: 10,
       total: 0,
-      items: []
+      items: [],
+      ready: false
     }
   },
   computed: {
@@ -37,22 +38,38 @@ export default {
     }
   },
   methods: {
+    getdata: function () {
+      axios({
+        method: 'get',
+        url: '/api/blog/admin/posts?Page=' + this.page + '&Limit=' + this.limit,
+        timeout: 3000
+      }).then(res => {
+        if (res.data.Message === 'UnAuthorized') {
+          console.log('删除过期token')
+          this.$cookies.remove('token')
+          console.log('重新获取token')
+          this.$router.push({path: '/'})
+        } else {
+          var result = res.data.result
+          this.total = result.total
+          this.items = result.item
+          console.log('获取数据成功')
+        }
+      })
+    },
     changepage: function (page) {
       this.page = page
+    },
+    insertpost: function () {
+      this.$router.push({
+        name: 'insertpost'
+      })
     }
   },
   created () {
-    axios({
-      method: 'get',
-      url: '/api/blog/posts?Page=' + this.page + '&Limit=' + this.limit,
-      timeout: 3000
-    }).then(res => {
-      var result = res.data.result
-      this.total = result.total
-      for (var key in result.item) {
-        this.items.push(result.item[key])
-      }
-    })
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.$cookies.get('token')
+    console.log('开始请求接口数据')
+    this.getdata()
   },
   watch: {
     page (newval) {

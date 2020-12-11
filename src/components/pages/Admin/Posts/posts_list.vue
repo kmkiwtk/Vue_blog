@@ -2,15 +2,18 @@
   <div class="post-wrap archive">
       <h3>{{year}}</h3>
       <article v-for="post in posts"
-               v-bind:key="post.url"
+               v-bind:key="post.id"
       class="archive-item">
-        <a @click="jumpbyurl(post.creationTime,post.title)">{{post.title}}</a>
+        <a @click="deletepost(post.id)" title="❌删除" >❌</a>
+        <a @click='jumpbyid(post.id)' title="📝编辑" >📝</a>
+        <a @click="jumpbyid(post.id)">{{post.title}}</a>
         <span class="archive-item-date">{{post.creationTime}}</span>
       </article>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'post_list',
   props: ['year', 'posts'],
@@ -21,14 +24,31 @@ export default {
   created () {
   },
   methods: {
-    jumpbyurl: function (time, name) {
-      var patt = /[\s|,]/
-      time = time.split(patt, 2)
-      var url = '/' + this.year + '/' + this.changetonumber(time[0]) + '/' + time[1] + '/' + name
+    jumpbyid: function (id) {
       this.$router.push({
-        name: 'post',
-        params: { url: url }
+        name: 'adminpost',
+        params: { id: id }
       })
+    },
+    deletepost: function (id) {
+      if (confirm('\n💥💢真的要干掉这个该死的文章吗💢💥')) {
+        axios({
+          method: 'delete',
+          url: '/api/blog/post',
+          params: {
+            id: id
+          }
+        }).then(res => {
+          if (res.data.Success) {
+            console.log('删除成功')
+          } else {
+            console.log('删除失败')
+            console.log(res.data.Message)
+          }
+        })
+      } else {
+        console.log('放弃删除')
+      }
     },
     changetonumber: function (month) {
       var t = 0

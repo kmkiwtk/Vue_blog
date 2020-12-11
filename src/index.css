@@ -309,7 +309,7 @@ a:hover {
 /*input css begin*/
 
 * {
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 input[type="checkbox"],
@@ -1331,7 +1331,7 @@ header label {
   top: 0;
   z-index: 996;
   background-color: #000;
-  opacity: 0.3;
+  opacity: 1;
 }
 .box-content {
   width: 90%;

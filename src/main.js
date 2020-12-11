@@ -5,8 +5,13 @@ import VueCookies from 'vue-cookies'
 import App from './App'
 import router from './router'
 import './index.css'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+
+Vue.config.productionTip = false
+
 Vue.use(VueCookies)
-Vue.config.productionTip = true
+Vue.use(ElementUI)
 
 /* eslint-disable no-new */
 new Vue({

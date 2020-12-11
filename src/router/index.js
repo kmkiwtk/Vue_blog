@@ -67,6 +67,12 @@ export default new Router({
     },
     {
       path: '/admin/post',
+      name: 'insertpost',
+      component: adminpost
+    },
+    {
+      path: '/admin/post/:id',
+      name: 'adminpost',
       component: adminpost
     },
     {
