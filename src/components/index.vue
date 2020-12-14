@@ -25,7 +25,7 @@
                 <a class="link-item" title="Manage" :href="url">
                     <i class="iconfont iconcode"></i>
                 </a>
-                <a target="_blank" class="link-item" title="Github" href="https://github.com/Meowv/">
+                <a target="_blank" class="link-item" title="Github" href="https://github.com/kmkiwtk/">
                     <i class="iconfont icongithub"></i>
                 </a>
                 <a @mouseover="mouseover" @mouseleave="mouseleave" class="link-item weixin" title="扫码关注微信公众号：『阿星Plus』查看更多。">

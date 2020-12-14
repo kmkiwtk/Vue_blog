@@ -1,7 +1,11 @@
 <template>
-  <div id="app">
+  <div class="wrapper" id="app">
     <myhead></myhead>
-    <router-view/>
+    <div class="main">
+      <div class="container">
+        <router-view/>
+      </div>
+    </div>
     <myfoot class="footer"></myfoot>
   </div>
 </template>

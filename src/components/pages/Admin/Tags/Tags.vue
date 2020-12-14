@@ -1,6 +1,7 @@
 <template>
-  <div>
-  <div class="post-wrap tags">
+<div>
+  <loader v-if="!ready"></loader>
+  <div class="post-wrap tags" v-if="ready">
     <h2 class="post-title">-&nbsp;Tags&nbsp;-</h2>
     <div class="categories-card">
       <tag-list v-for="tag in tags"
@@ -30,14 +31,20 @@
 import axios from 'axios'
 import tagList from './tag_list.vue'
 import box from './Box'
+import loader from '../../../loading'
 export default {
-  components: { tagList, box },
+  components: {
+    tagList,
+    box,
+    loader
+  },
   data () {
     return {
       tags: [],
       open: false,
       boxtag: {},
-      bottontext: ''
+      bottontext: '',
+      ready: false
     }
   },
   methods: {
@@ -55,6 +62,7 @@ export default {
         } else {
           this.tags = res.data.result
           console.log('获取数据成功')
+          this.ready = true
         }
       })
     },

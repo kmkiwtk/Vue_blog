@@ -1,5 +1,7 @@
 <template>
-  <div class="container">
+<div>
+  <loader v-if="!ready"></loader>
+  <div class="container" v-if="ready">
       <div class="post-wrap categories">
           <h2 class="post-title">-&nbsp;Categories&nbsp;-</h2>
           <div class="categories-card">
@@ -10,18 +12,22 @@
           </div>
       </div>
   </div>
+</div>
 </template>
 
 <script>
 import axios from 'axios'
 import categoriesList from './categories_list'
+import loader from '../../loading.vue'
 export default {
   components: {
-    categoriesList
+    categoriesList,
+    loader
   },
   data () {
     return {
-      categories: []
+      categories: [],
+      ready: false
     }
   },
   created () {
@@ -31,6 +37,7 @@ export default {
       timeout: 3000
     }).then(res => {
       this.categories = res.data.result
+      this.ready = true
     })
   }
 }

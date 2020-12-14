@@ -1,27 +1,33 @@
 <template>
-  <div class="post-wrap archive">
+<div>
+  <loader v-if="!ready"></loader>
+  <div class="post-wrap archive" v-if="ready">
     <a  @click="insertpost"><h3>📝~~~ 新增文章 ~~~📝</h3></a>
     <postsList v-for="item in items"
                :key="item.year"
                :year="item.year"
                :posts="item.posts"
+               @del="getdata"
     ></postsList>
     <postPage :pagetotal='totalpage'
               :currentpage='page'
               @changepage='changepage'
     ></postPage>
   </div>
+</div>
 </template>
 
 <script>
 import axios from 'axios'
 import postsList from './posts_list'
 import postPage from './posts_page'
+import loader from '../../../loading'
 export default {
   name: 'posts',
   components: {
     postsList,
-    postPage
+    postPage,
+    loader
   },
   data () {
     return {
@@ -54,6 +60,7 @@ export default {
           this.total = result.total
           this.items = result.item
           console.log('获取数据成功')
+          this.ready = true
         }
       })
     },

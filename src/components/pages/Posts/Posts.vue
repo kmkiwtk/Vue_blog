@@ -1,5 +1,7 @@
 <template>
-  <div class="post-wrap archive">
+<div>
+  <loader v-if="!ready"></loader>
+  <div class="post-wrap archive" v-if="ready">
     <postsList v-for="item in items"
                :key="item.year"
                :year="item.year"
@@ -10,24 +12,28 @@
               @changepage='changepage'
     ></postPage>
   </div>
+</div>
 </template>
 
 <script>
 import axios from 'axios'
 import postsList from './posts_list'
 import postPage from './posts_page'
+import loader from '../../loading'
 export default {
   name: 'posts',
   components: {
     postsList,
-    postPage
+    postPage,
+    loader
   },
   data () {
     return {
       page: 1,
       limit: 10,
       total: 0,
-      items: []
+      items: [],
+      ready: false
     }
   },
   computed: {
@@ -38,20 +44,22 @@ export default {
   methods: {
     changepage: function (page) {
       this.page = page
+    },
+    getdata: function () {
+      axios({
+        method: 'get',
+        url: '/api/blog/posts?Page=' + this.page + '&Limit=' + this.limit,
+        timeout: 3000
+      }).then(res => {
+        var result = res.data.result
+        this.total = result.total
+        this.items = result.item
+        this.ready = true
+      })
     }
   },
   created () {
-    axios({
-      method: 'get',
-      url: '/api/blog/posts?Page=' + this.page + '&Limit=' + this.limit,
-      timeout: 3000
-    }).then(res => {
-      var result = res.data.result
-      this.total = result.total
-      for (var key in result.item) {
-        this.items.push(result.item[key])
-      }
-    })
+    this.getdata()
   },
   watch: {
     page (newval) {

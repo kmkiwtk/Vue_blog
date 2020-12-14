@@ -14,6 +14,10 @@
 <script>
 export default {
   props: ['tag'],
+  created () {
+    console.log('box获得的数据')
+    console.log(this.tag)
+  },
   methods: {
     deletetag: function () {
       if (confirm('\n💥💢真的要干掉这个该死的标签吗💢💥')) {
@@ -25,8 +29,6 @@ export default {
     edittag: function () {
       this.$emit('edit')
     }
-  },
-  created () {
   }
 }
 </script>
