@@ -18,6 +18,8 @@ export default {
   components: {
     myhead,
     myfoot
+  },
+  created () {
   }
 }
 </script>

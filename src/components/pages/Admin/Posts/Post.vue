@@ -25,9 +25,9 @@
 </template>
 
 <script>
+import * as Admin from '../../../../api/Admin'
 import {mavonEditor} from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
-import axios from 'axios'
 import moment from 'moment'
 import box from './Box'
 import loader from '../../../loading'
@@ -57,7 +57,6 @@ export default {
     }
   },
   created () {
-    axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.$cookies.get('token')
     console.log('开始请求接口数据')
     var id = this.$route.params.id
     if (id) {
@@ -70,14 +69,7 @@ export default {
   },
   methods: {
     getdata: function (id) {
-      axios({
-        method: 'get',
-        url: '/api/blog/admin/post',
-        params: {
-          id: id
-        },
-        timeout: 3000
-      }).then(res => {
+      Admin.GetPostById(id).then(res => {
         if (res.data.success) {
           var result = res.data.result
           this.author = result.author
@@ -109,23 +101,17 @@ export default {
       console.log('开始保存')
       var id = this.$route.params.id
       if (id) {
-        axios({
-          method: 'put',
-          url: '/api/blog/post',
-          params: {
-            id: id
-          },
-          data: {
-            title: this.title,
-            author: this.author,
-            url: this.url,
-            html: this.html,
-            markdown: this.markdown,
-            categoryId: data.categoryId,
-            creationTime: this.creationTime,
-            tags: data.tags
-          }
-        }).then(res => {
+        var Editdata = {
+          title: this.title,
+          author: this.author,
+          url: this.url,
+          html: this.html,
+          markdown: this.markdown,
+          categoryId: data.categoryId,
+          creationTime: this.creationTime,
+          tags: data.tags
+        }
+        Admin.EditPost(id, Editdata).then(res => {
           if (res.data.success) {
             console.log('更新成功')
             this.getdata(this.$route.params.id)
@@ -135,23 +121,17 @@ export default {
           }
         })
       } else {
-        axios({
-          method: 'post',
-          url: '/api/blog/post',
-          params: {
-            id: id
-          },
-          data: {
-            title: this.title,
-            author: this.author,
-            url: this.url,
-            html: this.html,
-            markdown: this.markdown,
-            categoryId: data.categoryId,
-            creationTime: this.creationTime,
-            tags: data.tags
-          }
-        }).then(res => {
+        var insertdata = {
+          title: this.title,
+          author: this.author,
+          url: this.url,
+          html: this.html,
+          markdown: this.markdown,
+          categoryId: data.categoryId,
+          creationTime: this.creationTime,
+          tags: data.tags
+        }
+        Admin.InsertPost(id, insertdata).then(res => {
           if (res.data.success) {
             alert('添加成功')
           } else {

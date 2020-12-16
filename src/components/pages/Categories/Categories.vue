@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import * as Service from '../../../api/Service'
 import categoriesList from './categories_list'
 import loader from '../../loading.vue'
 export default {
@@ -31,11 +31,7 @@ export default {
     }
   },
   created () {
-    axios({
-      method: 'get',
-      url: '/api/blog/categories',
-      timeout: 3000
-    }).then(res => {
+    Service.GetCategories().then(res => {
       this.categories = res.data.result
       this.ready = true
     })

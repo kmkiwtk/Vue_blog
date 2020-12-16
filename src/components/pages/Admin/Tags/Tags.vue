@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import * as Admin from '../../../../api/Admin'
 import tagList from './tag_list.vue'
 import box from './Box'
 import loader from '../../../loading'
@@ -49,11 +49,7 @@ export default {
   },
   methods: {
     getData: function () {
-      axios({
-        method: 'get',
-        url: '/api/blog/admin/tags',
-        timeout: 3000
-      }).then(res => {
+      Admin.GetTagsForAdmin().then(res => {
         if (res.data.Message === 'UnAuthorized') {
           console.log('删除过期token')
           this.$cookies.remove('token')
@@ -83,17 +79,7 @@ export default {
       this.open = false
     },
     edittag: function (tag) {
-      axios({
-        method: 'put',
-        url: '/api/blog/tag',
-        params: {
-          id: tag.id
-        },
-        data: {
-          tagName: tag.tagName,
-          displayName: tag.displayName
-        }
-      }).then(res => {
+      Admin.EditTag(tag).then(res => {
         if (res.data.success === true) {
           console.log('编辑成功')
           this.getData()
@@ -109,14 +95,7 @@ export default {
     inserttag: function (tag) {
       this.open = false
       console.log('发起添加请求')
-      axios({
-        method: 'post',
-        url: '/api/blog/tag',
-        data: {
-          tagName: tag.tagName,
-          displayName: tag.displayName
-        }
-      }).then(res => {
+      Admin.InsertTag(tag).then(res => {
         if (res.data.success === true) {
           console.log('添加成功')
         } else {
@@ -128,10 +107,7 @@ export default {
     },
     deletetag: function (id) {
       console.log('发起删除请求')
-      axios({
-        url: 'api/blog/tag?id=' + id,
-        method: 'delete'
-      }).then(res => {
+      Admin.DeleteTagById(id).then(res => {
         if (res.data.success) {
           console.log('删除成功')
           this.getData()
@@ -143,7 +119,7 @@ export default {
     }
   },
   created () {
-    axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.$cookies.get('token')
+    Admin.addToken(this.$cookies.get('token'))
     console.log(this.$cookies.get('token'))
     console.log('开始请求接口数据')
     this.getData()

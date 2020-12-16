@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import * as Service from '../../../api/Service'
 import loader from '../../loading'
 export default {
   data () {
@@ -97,11 +97,7 @@ export default {
   methods: {
     getdata: function (url) {
       this.ready = false
-      axios({
-        method: 'get',
-        url: '/api/blog/post?url=' + url,
-        timeout: 3000
-      }).then(res => {
+      Service.GetPostByUrl(url).then(res => {
         var result = res.data.result
         console.log(res)
         this.author = result.author

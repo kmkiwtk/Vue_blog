@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import * as auth from '../../../api/Auth'
 import loader from '../../loading'
 export default {
   data () {
@@ -25,11 +25,7 @@ export default {
     },
     getaccesstoken: function () {
       console.log('请求accesstoken')
-      axios({
-        method: 'get',
-        url: '/api/auth/access_token?code=' + this.code,
-        timeout: 10000
-      }).then(res => {
+      auth.getaccesstoken(this.code).then(res => {
         console.log(res)
         this.accesstoken = res.data.result
         console.log('accesstoken is ' + this.accesstoken)
@@ -37,11 +33,7 @@ export default {
     },
     gettoken: function () {
       console.log('获取token')
-      axios({
-        method: 'get',
-        url: '/api/auth/token?access_token=' + this.accesstoken,
-        timeout: 10000
-      }).then(res => {
+      auth.gettoken(this.accesstoken).then(res => {
         console.log(res)
         this.token = res.data.result
         console.log('token is ' + this.token)

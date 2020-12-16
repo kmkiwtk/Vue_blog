@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import {geturl} from '../api/Auth'
 export default {
   name: 'index',
   data () {
@@ -56,37 +56,17 @@ export default {
     },
     mouseleave: function () {
       this.isshow = false
-    },
-    geturl: function () {
-      axios({
-        method: 'get',
-        url: '/api/auth/url',
-        timeout: 3000
-      }).then(res => {
-        this.url = res.data.result
-      })
     }
   },
   created () {
-    this.geturl()
+    geturl().then(res => {
+      this.url = res.data.result
+    })
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-/*h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}*/
+
 </style>

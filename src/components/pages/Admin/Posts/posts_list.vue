@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import * as Admin from '../../../../api/Admin'
 export default {
   name: 'post_list',
   props: ['year', 'posts'],
@@ -32,13 +32,7 @@ export default {
     },
     deletepost: function (id) {
       if (confirm('\n💥💢真的要干掉这个该死的文章吗💢💥')) {
-        axios({
-          method: 'delete',
-          url: '/api/blog/post',
-          params: {
-            id: id
-          }
-        }).then(res => {
+        Admin.DeletePost(id).then(res => {
           if (res.data.success) {
             console.log('删除成功')
           } else {

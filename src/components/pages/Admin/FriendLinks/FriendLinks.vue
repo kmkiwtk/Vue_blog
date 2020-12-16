@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import * as Admin from '../../../../api/Admin'
 import friendlinkList from './friendlink_list.vue'
 import box from './Box'
 import loader from '../../../loading'
@@ -49,11 +49,7 @@ export default {
   },
   methods: {
     getData: function () {
-      axios({
-        method: 'get',
-        url: '/api/blog/admin/friendlinks',
-        timeout: 3000
-      }).then(res => {
+      Admin.GetFriendLinksForAdmin().then(res => {
         if (res.data.Message === 'UnAuthorized') {
           console.log('删除过期token')
           this.$cookies.remove('token')
@@ -83,17 +79,7 @@ export default {
       this.open = false
     },
     editfriendlink: function (friendlink) {
-      axios({
-        method: 'put',
-        url: '/api/blog/friendlink',
-        params: {
-          id: friendlink.id
-        },
-        data: {
-          title: friendlink.title,
-          linkUrl: friendlink.linkUrl
-        }
-      }).then(res => {
+      Admin.EditFriendLink(friendlink).then(res => {
         if (res.data.success === true) {
           console.log('编辑成功')
           this.getData()
@@ -107,14 +93,7 @@ export default {
     insertfriendlink: function (friendlink) {
       this.open = false
       console.log('发起添加请求')
-      axios({
-        method: 'post',
-        url: '/api/blog/friendlink',
-        data: {
-          title: friendlink.title,
-          linkUrl: friendlink.linkUrl
-        }
-      }).then(res => {
+      Admin.InsertFriendLink(friendlink).then(res => {
         if (res.data.success === true) {
           console.log('添加成功')
           this.closebox()
@@ -127,10 +106,7 @@ export default {
     },
     deletefriendlink: function (id) {
       console.log('发起删除请求')
-      axios({
-        url: 'api/blog/friendlink?id=' + id,
-        method: 'delete'
-      }).then(res => {
+      Admin.DeleteFriendLink(id).then(res => {
         if (res.data.success) {
           console.log('删除成功')
           this.getData()
@@ -142,7 +118,7 @@ export default {
     }
   },
   created () {
-    axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.$cookies.get('token')
+    Admin.addToken(this.$cookies.get('token'))
     console.log(this.$cookies.get('token'))
     console.log('开始请求接口数据')
     this.getData()

@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import * as Service from '../../../api/Service'
 import postsList from '../Posts/posts_list'
 import loader from '../../loading'
 export default {
@@ -34,11 +34,7 @@ export default {
   },
   methods: {
     getData: function () {
-      axios({
-        method: 'get',
-        url: '/api/blog/posts/category?name=' + this.$route.params.name,
-        timeout: 3000
-      }).then(res => {
+      Service.GetPostsByCategoryName(this.$route.params.name).then(res => {
         var result = res.data.result
         this.items = result
         this.ready = true

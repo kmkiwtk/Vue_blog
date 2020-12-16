@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import * as Service from '../../../api/Service'
 import postsList from './posts_list'
 import postPage from './posts_page'
 import loader from '../../loading'
@@ -46,11 +46,7 @@ export default {
       this.page = page
     },
     getdata: function () {
-      axios({
-        method: 'get',
-        url: '/api/blog/posts?Page=' + this.page + '&Limit=' + this.limit,
-        timeout: 3000
-      }).then(res => {
+      Service.GetPosts(this.page, this.limit).then(res => {
         var result = res.data.result
         this.total = result.total
         this.items = result.item
@@ -64,11 +60,7 @@ export default {
   watch: {
     page (newval) {
       this.item = []
-      axios({
-        method: 'get',
-        url: '/api/blog/posts?Page=' + this.page + '&Limit=' + this.limit,
-        timeout: 3000
-      }).then(res => {
+      Service.GetPosts(this.page, this.limit).then(res => {
         var result = res.data.result
         this.total = result.total
         for (var key in result.item) {

@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import * as Service from '../../../api/Service'
 import tagsList from './tags_list'
 import loader from '../../loading'
 export default {
@@ -35,11 +35,7 @@ export default {
   },
   methods: {
     getData: function () {
-      axios({
-        method: 'get',
-        url: '/api/blog/tags',
-        timeout: 3000
-      }).then(res => {
+      Service.GetTags().then(res => {
         this.tags = res.data.result
         this.ready = true
       })

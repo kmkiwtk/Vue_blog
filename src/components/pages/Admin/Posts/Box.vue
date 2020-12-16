@@ -36,8 +36,8 @@
 </template>
 
 <script>
+import * as Admin from '../../../../api/Admin'
 import 'element-ui/lib/theme-chalk/index.css'
-import axios from 'axios'
 export default {
   components: {
   },
@@ -59,10 +59,7 @@ export default {
     },
     getcategories: function () {
       console.log('开始获取分类列表')
-      axios({
-        method: 'get',
-        url: '/api/blog/admin/categories'
-      }).then(res => {
+      Admin.GetCategoriesForAdmin().then(res => {
         if (res.data.success) {
           console.log('分类获取成功')
           this.categories = res.data.result
@@ -76,10 +73,7 @@ export default {
     },
     gettags: function () {
       console.log('开始获取标签列表')
-      axios({
-        method: 'get',
-        url: '/api/blog/admin/tags'
-      }).then(res => {
+      Admin.GetTagsForAdmin().then(res => {
         if (res.data.success) {
           console.log('标签获取成功')
           this.tagslist = res.data.result
@@ -118,7 +112,6 @@ export default {
     }
   },
   created () {
-    axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.$cookies.get('token')
     console.log('box接收到的数据：')
     console.log('分类id: ' + this.categoryId)
     console.log(this.tags)

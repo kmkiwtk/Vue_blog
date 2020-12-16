@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import * as Service from '../../../api/Service'
 import friendLinksList from './friendlinks_list'
 import loader from '../../loading'
 export default {
@@ -35,11 +35,7 @@ export default {
   },
   methods: {
     getData: function () {
-      axios({
-        method: 'get',
-        url: '/api/blog/friendlinks',
-        timeout: 3000
-      }).then(res => {
+      Service.GetFriendLinks().then(res => {
         this.friendlinks = res.data.result
         this.ready = true
       })

@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import * as Admin from '../../../../api/Admin'
 import categoryList from './category_list.vue'
 import box from './Box'
 import loader from '../../../loading'
@@ -49,11 +49,7 @@ export default {
   },
   methods: {
     getData: function () {
-      axios({
-        method: 'get',
-        url: '/api/blog/admin/categories',
-        timeout: 3000
-      }).then(res => {
+      Admin.GetCategoriesForAdmin().then(res => {
         if (res.data.Message === 'UnAuthorized') {
           console.log('删除过期token')
           this.$cookies.remove('token')
@@ -83,17 +79,7 @@ export default {
       this.open = false
     },
     editcategory: function (category) {
-      axios({
-        method: 'put',
-        url: '/api/blog/category',
-        params: {
-          id: category.id
-        },
-        data: {
-          categoryName: category.categoryName,
-          displayName: category.displayName
-        }
-      }).then(res => {
+      Admin.EditCategory(category).then(res => {
         if (res.data.success === true) {
           console.log('编辑成功')
           this.getData()
@@ -106,14 +92,7 @@ export default {
     insertcategory: function (category) {
       this.open = false
       console.log('发起添加请求')
-      axios({
-        method: 'post',
-        url: '/api/blog/category',
-        data: {
-          categoryName: category.categoryName,
-          displayName: category.displayName
-        }
-      }).then(res => {
+      Admin.InsertCategory(category).then(res => {
         if (res.data.success === true) {
           console.log('添加成功')
         } else {
@@ -125,13 +104,7 @@ export default {
     },
     deletecategory: function (id) {
       console.log('发起删除请求')
-      axios({
-        url: 'api/blog/category',
-        method: 'delete',
-        params: {
-          id: id
-        }
-      }).then(res => {
+      Admin.DeleteCategory(id).then(res => {
         if (res.data.success) {
           console.log('删除成功')
           this.getData()
@@ -143,7 +116,7 @@ export default {
     }
   },
   created () {
-    axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.$cookies.get('token')
+    Admin.addToken(this.$cookies.get('token'))
     console.log(this.$cookies.get('token'))
     console.log('开始请求接口数据')
     this.getData()

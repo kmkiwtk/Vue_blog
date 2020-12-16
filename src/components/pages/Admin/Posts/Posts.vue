@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import * as Admin from '../../../../api/Admin'
 import postsList from './posts_list'
 import postPage from './posts_page'
 import loader from '../../../loading'
@@ -45,11 +45,7 @@ export default {
   },
   methods: {
     getdata: function () {
-      axios({
-        method: 'get',
-        url: '/api/blog/admin/posts?Page=' + this.page + '&Limit=' + this.limit,
-        timeout: 3000
-      }).then(res => {
+      Admin.GetPostsForAdmin(this.page, this.limit).then(res => {
         if (res.data.Message === 'UnAuthorized') {
           console.log('删除过期token')
           this.$cookies.remove('token')
@@ -74,22 +70,14 @@ export default {
     }
   },
   created () {
-    axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.$cookies.get('token')
+    Admin.addToken(this.$cookies.get('token'))
     console.log('开始请求接口数据')
     this.getdata()
   },
   watch: {
     page (newval) {
       this.item = []
-      axios({
-        method: 'get',
-        url: '/api/blog/admin/posts',
-        timeout: 3000,
-        params: {
-          Page: this.page,
-          Limit: this.limit
-        }
-      }).then(res => {
+      Admin.GetPostsForAdmin(this.page, this.limit).then(res => {
         var result = res.data.result
         this.total = result.total
         for (var key in result.item) {
