@@ -108,7 +108,7 @@ export default {
         return '分类不存在'
       } else {
         console.log('没有ID')
-        return 'Id不正确'
+        return 'Category'
       }
     },
     SelectCategory: function (id) {

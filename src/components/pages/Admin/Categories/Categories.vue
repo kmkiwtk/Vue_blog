@@ -1,6 +1,7 @@
 <template>
 <div>
-  <div class="post-wrap categories">
+  <loader v-if="!ready"></loader>
+  <div class="post-wrap categories" v-if="ready">
     <h2 class="post-title">-&nbsp;Categories&nbsp;-</h2>
     <div class="categories-card">
       <category-list v-for="category in categories"
@@ -30,14 +31,20 @@
 import axios from 'axios'
 import categoryList from './category_list.vue'
 import box from './Box'
+import loader from '../../../loading'
 export default {
-  components: { categoryList, box },
+  components: {
+    categoryList,
+    box,
+    loader
+  },
   data () {
     return {
       categories: [],
       open: false,
       boxcategory: {},
-      bottontext: ''
+      bottontext: '',
+      ready: false
     }
   },
   methods: {
@@ -55,6 +62,7 @@ export default {
         } else {
           this.categories = res.data.result
           console.log('获取数据成功')
+          this.ready = true
         }
       })
     },

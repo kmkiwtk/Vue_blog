@@ -1,12 +1,14 @@
 <template>
+<div>
+  <loader v-if="!ready"></loader>
   <div class="post-box" id="editor" v-if="ready">
     <div class="post-box-item">
       <input type="text" v-model="title" placeholder="标题" autocomplete="off" />
       <input type="text" v-model="author" placeholder="作者" autocomplete="off" />
     </div>
     <div class="post-box-item">
-      <input type="text" v-model="url" placeholder="URL" autocomplete="off" />
-      <input type="text" v-model="creationTime" placeholder="时间" autocomplete="off" />
+      <input type="text" v-model="url" placeholder="URL" autocomplete="off" readonly/>
+      <input type="text" v-model="creationTime" placeholder="时间" autocomplete="off" readonly/>
     </div>
     <mavon-editor class="" style="height:100%;z-index:auto;opacity:1" v-model="markdown"
                                        @change="change"
@@ -19,6 +21,7 @@
        @save="save"
     ></box>
   </div>
+</div>
 </template>
 
 <script>
@@ -27,10 +30,12 @@ import 'mavon-editor/dist/css/index.css'
 import axios from 'axios'
 import moment from 'moment'
 import box from './Box'
+import loader from '../../../loading'
 export default {
   components: {
     mavonEditor,
-    box
+    box,
+    loader
   },
   data () {
     return {
@@ -47,6 +52,9 @@ export default {
     }
   },
   watch: {
+    title (newval) {
+      this.url = newval
+    }
   },
   created () {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.$cookies.get('token')
@@ -158,6 +166,9 @@ export default {
     },
     openbox: function () {
       this.open = true
+    },
+    titletourl: function (e) {
+      this.title = e.target.value
     }
   }
 }

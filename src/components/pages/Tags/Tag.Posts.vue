@@ -1,5 +1,7 @@
 <template>
-  <div class="container">
+<div>
+  <loader v-if="!ready"></loader>
+  <div class="container" v-if="ready">
       <div class="post-wrap tags">
           <h2 class="post-title">-&nbsp;Tag&nbsp;·&nbsp;{{this.$route.params.name}}&nbsp;-</h2>
       </div>
@@ -9,29 +11,39 @@
                :posts="item.posts"
       ></postsList>
   </div>
+</div>
 </template>
 
 <script>
 import axios from 'axios'
 import postsList from '../Posts/posts_list'
+import loader from '../../loading'
 export default {
   data () {
     return {
-      items: []
+      items: [],
+      ready: false
     }
   },
   components: {
-    postsList
+    postsList,
+    loader
   },
   created () {
-    axios({
-      method: 'get',
-      url: '/api/blog/posts/tag?name=' + this.$route.params.name,
-      timeout: 3000
-    }).then(res => {
-      var result = res.data.result
-      this.items = result
-    })
+    this.getData()
+  },
+  methods: {
+    getData: function () {
+      axios({
+        method: 'get',
+        url: '/api/blog/posts/tag?name=' + this.$route.params.name,
+        timeout: 3000
+      }).then(res => {
+        var result = res.data.result
+        this.items = result
+        this.ready = true
+      })
+    }
   }
 }
 </script>

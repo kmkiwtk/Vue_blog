@@ -1,6 +1,7 @@
 <template>
 <div>
-  <div class="post-wrap categories">
+  <loader v-if="!ready"></loader>
+  <div class="post-wrap categories" v-if="ready">
     <h2 class="post-title">-&nbsp;FriendLinks&nbsp;-</h2>
     <div class="categories-card">
       <friendlink-list v-for="friendlink in friendlinks"
@@ -30,14 +31,20 @@
 import axios from 'axios'
 import friendlinkList from './friendlink_list.vue'
 import box from './Box'
+import loader from '../../../loading'
 export default {
-  components: { friendlinkList, box },
+  components: {
+    friendlinkList,
+    box,
+    loader
+  },
   data () {
     return {
       friendlinks: [],
       open: false,
       boxfriendlink: {},
-      bottontext: ''
+      bottontext: '',
+      ready: false
     }
   },
   methods: {
@@ -55,6 +62,7 @@ export default {
         } else {
           this.friendlinks = res.data.result
           console.log('获取数据成功')
+          this.ready = true
         }
       })
     },

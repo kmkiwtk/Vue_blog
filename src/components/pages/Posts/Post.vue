@@ -1,5 +1,7 @@
 <template>
-  <article class="post-wrap">
+<div>
+  <loader v-if="!ready"></loader>
+  <article class="post-wrap" v-if="ready">
     <header class="post-header">
       <h1 class="post-title">{{title}}</h1>
       <div class="post-meta">
@@ -63,10 +65,12 @@
       </a>
     </section>
   </article>
+</div>
 </template>
 
 <script>
 import axios from 'axios'
+import loader from '../../loading'
 export default {
   data () {
     return {
@@ -79,8 +83,12 @@ export default {
       previous: {},
       tags: [],
       title: '',
-      url: ''
+      url: '',
+      ready: false
     }
+  },
+  components: {
+    loader
   },
   created () {
     var url = this.$route.params.url
@@ -88,6 +96,7 @@ export default {
   },
   methods: {
     getdata: function (url) {
+      this.ready = false
       axios({
         method: 'get',
         url: '/api/blog/post?url=' + url,
@@ -105,6 +114,7 @@ export default {
         this.tags = result.tags
         this.title = result.title
         this.url = result.url
+        this.ready = true
       })
     }
   }

@@ -39,12 +39,13 @@ export default {
             id: id
           }
         }).then(res => {
-          if (res.data.Success) {
+          if (res.data.success) {
             console.log('删除成功')
           } else {
             console.log('删除失败')
-            console.log(res.data.Message)
+            console.log(res.data.message)
           }
+          this.$emit('del')
         })
       } else {
         console.log('放弃删除')
